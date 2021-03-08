@@ -13,9 +13,6 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -25,9 +22,10 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class ReadModifiedController {
     @GetMapping("/")
-    public String hello() {
-        String systemipaddress = "";
-        try
+    public String indexPage() {
+        String systemipaddress = "localhost";
+        //get dynamic ip, uncomment if you are not using local server
+        /*try
         {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
 
@@ -41,13 +39,11 @@ public class ReadModifiedController {
         {
             System.out.println("Cannot Execute Properly");
             systemipaddress = "localhost";
-        }
+        }*/
         String result = "<div style='text-align:center;'><u><b>Available endpoints</b></u> : <br><br>";
-        result += "<a href='http://"+systemipaddress+":12000/gigaspaces/runConcurrentReadAndWrite' target='_blank'>Concurrent Read And Write</a><br><br>";
-        result += "<a href='http://"+systemipaddress+":12000/gigaspaces/runConcurrentReadAndWriteWithSleep' target='_blank'>Concurrent Read And Write With Sleep</a><br><br>";
-        result += "<a href='http://"+systemipaddress+":12000/gigaspaces/runMultipleWriteTransaction' target='_blank'>Multiple Write with Transaction</a><br><br>";
-       // result += "<a href='http://localhost:12000/gigaspaces/readCommitted' target='_blank'>Read Committed</a><br><br>";
-       // result += "<a href='http://localhost:12000/gigaspaces/exclusiveReadLock' target='_blank'>Exclusive Read Lock</a><br><br></div>";
+        result += "<a href='http://" + systemipaddress + ":12000/gigaspaces/runConcurrentReadAndWrite' target='_blank'>Concurrent Read And Write</a><br><br>";
+        result += "<a href='http://" + systemipaddress + ":12000/gigaspaces/runConcurrentReadAndWriteWithSleep' target='_blank'>Concurrent Read And Write With Sleep</a><br><br>";
+        result += "<a href='http://" + systemipaddress + ":12000/gigaspaces/runMultipleWriteTransaction' target='_blank'>Multiple Write with Transaction</a><br><br>";
         return result;
     }
 
@@ -59,7 +55,6 @@ public class ReadModifiedController {
         5 thread read id=1 READ_COMMITTED
         5 thread write id=1 transaction repeatable_read
         expected: error while writing
-
          */
 
         try {
@@ -67,12 +62,12 @@ public class ReadModifiedController {
             ExecutorService executorService = Executors.newFixedThreadPool(noOfThreads);
 
             PlatformTransactionManager ptmRC = new DistributedJiniTxManagerConfigurer().transactionManager();
-            GigaSpace gigaSpaceRC = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.1"))
+            GigaSpace gigaSpaceRC = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.0"))
                     .transactionManager(ptmRC)
                     .defaultReadModifiers(ReadModifiers.READ_COMMITTED).create();
 
             PlatformTransactionManager ptmRR = new DistributedJiniTxManagerConfigurer().transactionManager();
-            GigaSpace gigaSpaceRR = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.1"))
+            GigaSpace gigaSpaceRR = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.0"))
                     .transactionManager(ptmRR)
                     .defaultReadModifiers(ReadModifiers.REPEATABLE_READ).create();
 
@@ -84,7 +79,6 @@ public class ReadModifiedController {
                         @Override
                         public void run() {
                             try {
-                                //GigaSpace gigaSpace = Program.getOrCreateSpace("demo");
                                 Person template = new Person();
                                 template.setId(1L);
 
@@ -111,7 +105,6 @@ public class ReadModifiedController {
                         @Override
                         public void run() {
                             try {
-                                //GigaSpace gigaSpace = Program.getOrCreateSpace("demo");
                                 Person p = new Person(1l, "firtName", "lastName", 50);
                                 DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
                                 //configure the transaction definition
@@ -156,10 +149,9 @@ public class ReadModifiedController {
         int noOfThreads = 4;
         System.out.println("Start runConcurrentReadAndWriteWithSleep");
         /*
-        5 thread read id=1 READ_COMMITTED
-        5 thread write id=1 transaction repeatable_read
-        expected: error while writing
-
+            5 thread read id=1 READ_COMMITTED
+            5 thread write id=1 transaction repeatable_read
+            expected: error while writing
          */
 
         try {
@@ -167,12 +159,12 @@ public class ReadModifiedController {
             ExecutorService executorService = Executors.newFixedThreadPool(noOfThreads);
 
             PlatformTransactionManager ptmRC = new DistributedJiniTxManagerConfigurer().transactionManager();
-            GigaSpace gigaSpaceRC = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.1"))
+            GigaSpace gigaSpaceRC = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.0"))
                     .transactionManager(ptmRC)
                     .defaultReadModifiers(ReadModifiers.READ_COMMITTED).create();
 
             PlatformTransactionManager ptmRR = new DistributedJiniTxManagerConfigurer().transactionManager();
-            GigaSpace gigaSpaceRR = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.1"))
+            GigaSpace gigaSpaceRR = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.0"))
                     .transactionManager(ptmRR)
                     .defaultReadModifiers(ReadModifiers.REPEATABLE_READ).create();
 
@@ -184,7 +176,6 @@ public class ReadModifiedController {
                         @Override
                         public void run() {
                             try {
-                                //GigaSpace gigaSpace = Program.getOrCreateSpace("demo");
                                 Person template = new Person();
                                 template.setId(1L);
 
@@ -211,7 +202,6 @@ public class ReadModifiedController {
                         @Override
                         public void run() {
                             try {
-                                //GigaSpace gigaSpace = Program.getOrCreateSpace("demo");
                                 Person p = new Person(1l, "firtName", "lastName", 50);
                                 DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
                                 //configure the transaction definition
@@ -265,19 +255,18 @@ public class ReadModifiedController {
         try {
 
             PlatformTransactionManager ptmRR = new DistributedJiniTxManagerConfigurer().transactionManager();
-            GigaSpace gigaSpaceRR = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.1"))
+            GigaSpace gigaSpaceRR = new GigaSpaceConfigurer(new SpaceProxyConfigurer("demo").lookupGroups("xap-15.8.0"))
                     .transactionManager(ptmRR)
                     .defaultReadModifiers(ReadModifiers.REPEATABLE_READ).create();
 
 
-            List<Person> personList=new ArrayList<Person>();
+            List<Person> personList = new ArrayList<Person>();
             // READ threads
-            for (long i=0;i<noOfObject;i++) {
+            for (long i = 0; i < noOfObject; i++) {
                 Person p = new Person(i, "firtName", "lastName", 50);
                 personList.add(p);
             }
             try {
-                //GigaSpace gigaSpace = Program.getOrCreateSpace("demo");
                 DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
                 //configure the transaction definition
                 definition.setPropagationBehavior(Propagation.REQUIRES_NEW.ordinal());
@@ -285,9 +274,9 @@ public class ReadModifiedController {
                 try { //do things with the GigaSpace instance...
                     gigaSpaceRR.writeMultiple(personList.toArray());
                     System.out.println("Trying to Write Multiple - ");
-                    try{
+                    try {
                         Thread.sleep(5000);
-                    }catch(Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     ptmRR.commit(status);
@@ -298,7 +287,7 @@ public class ReadModifiedController {
                     e.printStackTrace();
                 }
 
-            }catch(Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } catch (Exception e) {
@@ -308,7 +297,7 @@ public class ReadModifiedController {
         return "SUCCESS";
     }
 
-        @GetMapping("/repeatableRead")
+    @GetMapping("/repeatableRead")
     public String repeatableRead() {
 
         return "Success";

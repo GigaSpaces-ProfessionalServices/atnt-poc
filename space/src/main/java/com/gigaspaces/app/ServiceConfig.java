@@ -17,7 +17,9 @@ package com.gigaspaces.app;
 
 import org.openspaces.config.DefaultServiceConfig;
 import org.openspaces.core.config.annotation.EmbeddedSpaceBeansConfig;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 
 @Configuration
 @Import({DefaultServiceConfig.class, EmbeddedSpaceBeansConfig.class})

@@ -15,7 +15,10 @@
  */
 package com.gigaspaces.app;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.openspaces.core.GigaSpace;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
