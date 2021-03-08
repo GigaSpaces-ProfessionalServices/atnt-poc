@@ -1,0 +1,12 @@
+./demoatnt.sh --create
+    # Deploy by using gsctl, use the list-services to get endPoints.
+ ./demoatnt.sh --deploy
+    # Deploy the space
+./demoatnt.sh --undeploy
+    # Undeploy the space
+./demoatnt.sh --startspringapp
+    # Start spring boot application
+./demoatnt.sh --stopspringapp
+    # Stop spring boot application
+./demoatnt.sh --destroy
+    # Destroy all components
